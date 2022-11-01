@@ -139,6 +139,11 @@ export default {
         this.showAddLinkForm()
       }
     },
+    // eslint-disable-next-line no-unused-vars
+    onDoubleClick(e, node){
+      // eslint-disable-next-line no-unused-vars
+     this.myDiagram.commit(d => console.log(d))
+    },
     showAddLinkForm() {
       this.$modal.show(AddLinkForm, {first: this.firstNodeRelation, second: this.secondNodeRelation})
     },
@@ -163,7 +168,7 @@ export default {
           this.$(go.Panel, "Horizontal",
               // property visibility/access
               this.$(go.TextBlock,
-                  {isMultiline: false, editable: false, width: 12},
+                  {isMultiline: false, editable: true, width: 12},
                   new go.Binding("text", "visibility", this.convertVisibility)),
               this.$(go.TextBlock,
                   {isMultiline: false, editable: true},
@@ -175,20 +180,20 @@ export default {
                   {isMultiline: false, editable: true},
                   new go.Binding("text", "type").makeTwoWay()),
               this.$(go.TextBlock,
-                  {isMultiline: false, editable: false},
+                  {isMultiline: false, editable: true},
                   new go.Binding("text", "default", s => s ? " = " + s : ""))
           );
 
       var methodTemplate =
           this.$(go.Panel, "Horizontal",
               this.$(go.TextBlock,
-                  {isMultiline: false, editable: false, width: 12},
+                  {isMultiline: true, editable: true, width: 12},
                   new go.Binding("text", "visibility", this.convertVisibility)),
               this.$(go.TextBlock,
                   {isMultiline: false, editable: true},
                   new go.Binding("text", "name").makeTwoWay(),
                   new go.Binding("isUnderline", "scope", s => s[0] === 'c')),
-              this.$(go.TextBlock, "()",
+              this.$(go.TextBlock, {isMultiline:false, editable: true}, "()",
                   new go.Binding("text", "parameters", function (parr) {
                     var s = "(";
                     for (var i = 0; i < parr.length; i++) {
@@ -212,6 +217,7 @@ export default {
                 fromSpot: go.Spot.AllSides,
                 toSpot: go.Spot.AllSides,
                 click: this.onClickNode,
+                doubleClick: this.onDoubleClick,
               },
               this.$(go.Shape, {fill: "lightyellow"}),
               this.$(go.Panel, "Table",
