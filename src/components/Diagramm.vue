@@ -281,15 +281,57 @@ export default {
             nodeDataArray: this.nodedata,
             linkDataArray: this.linkdata
           });
-
+    },
+    async getSavedDiagramm(){
+      // eslint-disable-next-line no-unused-vars
+      let data = await this.$store.dispatch('SHOW_PROJECT', this.$route.query.id)
+      console.log(data.data.schema)
+      if(data.data.schema === null){
+        this.$store.commit('setNode', [])
+        this.$store.commit('setLink', [])
+      }else {
+        data.data = JSON.parse(data.data.schema)
+        this.$store.commit('setNode', data.data.nodedata)
+        this.$store.commit('setLink', data.data.linkdata)
+      }
+      this.$notify({
+        type: data.type,
+        title: data.title,
+        text: data.message,
+      })
+    },
+    async save(){
+      let nodedata = JSON.parse(JSON.stringify(this.myDiagram.model.nodeDataArray))
+      let linkdata = JSON.parse(JSON.stringify(this.myDiagram.model.linkDataArray))
+      let savedata = {nodedata: nodedata, linkdata: linkdata}
+      let updateSchema = {
+        data: savedata,
+        id: this.$route.query.id
+      }
+      let data = await this.$store.dispatch('SAVE_SCHEMA',updateSchema)
+      this.$notify({
+        type: data.type,
+        title: data.title,
+        text: data.message,
+      })
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getSavedDiagramm();
     this.drawDiagramm()
     eventBus.$on('addedNode', this.addNode)
     eventBus.$on('clickAddRelation', this.clickAddRelation)
     eventBus.$on('addRelation', this.addRelation)
     eventBus.$on('cancelAddLink', this.resetTargets)
+    eventBus.$on('saveJson', this.save)
+  },
+  destroyed() {
+    eventBus.$off('addedNode')
+    eventBus.$off('clickAddRelation')
+    eventBus.$off('addRelation')
+    eventBus.$off('cancelAddLink')
+    eventBus.$off('saveJson')
+
   },
   computed: {
     nodedata() {
