@@ -28,6 +28,11 @@
               <h6>Сохранить изменения</h6>
             </div>
           </div>
+          <div class="row">
+            <div class="col menu-item" @click="backToMain()">
+              <h6>На главную</h6>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -67,6 +72,9 @@ export default {
     cancel() {
       this.isAdding = false
       eventBus.$emit('cancelAddLink')
+    },
+    backToMain() {
+      this.$router.push('/');
     },
     save() {
       eventBus.$emit('saveJson')
