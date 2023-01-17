@@ -3,14 +3,14 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
-          <h5>Меню <span class="button" @click="showMenu()">{{ isVisible ? "(Свернуть)" : "(Развернуть)" }}</span></h5>
+          <h5>Меню <span class="button" @click="showMenu()">{{ isVisible? "(Свернуть)": "(Развернуть)" }}</span></h5>
         </div>
       </div>
       <div class="row" v-show="isVisible">
         <div class="container">
           <div class="row">
             <div class="col menu-item" @click="showForm">
-              <h6>Добавить блок</h6>
+              <h6>Добавить сущность</h6>
             </div>
           </div>
           <div class="row" v-if="!isAdding">
@@ -36,12 +36,12 @@
 </template>
 
 <script>
-import {eventBus} from "@/eventBus";
+import { eventBus } from "@/eventBus";
 import AddForm from "@/components/AddForm";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Menu",
-  components:{
+  components: {
     // eslint-disable-next-line vue/no-unused-components
     AddForm
   },
@@ -50,12 +50,12 @@ export default {
       isVisible: true,
     }
   },
-  computed:{
-    isAdding:{
-      get(){
+  computed: {
+    isAdding: {
+      get() {
         return this.$store.state.isAdding
       },
-      set(value){
+      set(value) {
         this.$store.commit('changeIsAdding', value)
       }
     }
@@ -64,27 +64,29 @@ export default {
     showMenu() {
       this.isVisible = !this.isVisible
     },
-    cancel(){
+    cancel() {
       this.isAdding = false
       eventBus.$emit('cancelAddLink')
     },
-    save(){
+    save() {
       eventBus.$emit('saveJson')
     },
-    addRelation(){
+    addRelation() {
       eventBus.$emit('clickAddRelation')
     },
-    showForm(){
-      this.$modal.show(AddForm, )
+    showForm() {
+      this.$modal.show(AddForm,)
     },
-    addBlock(){
-      let node = { name: "Professor",
+    addBlock() {
+      let node = {
+        name: "Professor",
         properties: [
-          {name: "classes", type: "List", visibility: "public"}
+          { name: "classes", type: "List", visibility: "public" }
         ],
         methods: [
-          {name: "teach", parameters: [{name: "class", type: "Course"}], visibility: "private"}
-        ]}
+          { name: "teach", parameters: [{ name: "class", type: "Course" }], visibility: "private" }
+        ]
+      }
       eventBus.$emit('addedNode', node)
     }
   }
@@ -113,14 +115,17 @@ export default {
 .button:hover {
   color: #275e11;
 }
-.menu-item{
+
+.menu-item {
   border-bottom: 1px solid grey !important;
 }
-.menu-item:hover{
+
+.menu-item:hover {
   background-color: whitesmoke;
   cursor: pointer;
 }
-.vm--modal{
+
+.vm--modal {
   overflow: scroll !important;
 }
 </style>

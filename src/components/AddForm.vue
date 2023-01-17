@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-4"><h5>Добавить блок</h5></div>
+      <div class="col-5">
+        <h5>Добавить Сущность</h5>
+      </div>
     </div>
     <div class="scroll row justify-content-center">
       <form>
@@ -12,7 +14,7 @@
         <h6>Свойства</h6>
         <div class="row">
           <div class="col-1" @click.prevent="deleteProp('prop')">
-            <button class="btn btn-custom btn-primary">-</button>
+            <button class="btn btn-custom-one btn-primary">-</button>
           </div>
           <div class="col">
             <template v-for="(prop, i) in createNode.properties">
@@ -27,9 +29,9 @@
                     <input class="form-control" type="text" v-model="prop.type">
                   </div>
                   <div class="col">
-                    <label>Об. вид.</label>
+                    <label>Мод. доступа</label>
                     <select class="form-select">
-                      <option v-for="(v, key) in visible" :key="'A'+key" :value="v">{{ v }}</option>
+                      <option v-for="(v, key) in visible" :key="'A' + key" :value="v">{{ v }}</option>
                     </select>
                   </div>
                 </div>
@@ -38,7 +40,7 @@
             </template>
           </div>
           <div class="col-1">
-            <button @click.prevent="addElement('prop')" class="btn btn-custom btn-primary">+</button>
+            <button @click.prevent="addElement('prop')" class="btn btn-custom-one btn-primary">+</button>
           </div>
 
         </div>
@@ -46,33 +48,33 @@
         <h6>Методы</h6>
         <div class="row">
           <div class="col-1">
-            <button @click.prevent="deleteProp('method')" class="btn btn-custom btn-primary">-</button>
+            <button @click.prevent="deleteProp('method')" class="btn btn-custom-one btn-primary">-</button>
           </div>
           <div class="col">
             <template v-for="(prop, key) in createNode.methods">
-              <div class="form-group" :key="'B'+key">
+              <div class="form-group" :key="'B' + key">
                 <div class="row">
                   <div class="col">
                     <label>Имя</label>
                     <input class="form-control" type="text" v-model="prop.name">
                   </div>
                   <div class="col">
-                    <label>Об. вид.</label>
+                    <label>Модификатор доступа</label>
                     <select class="form-select" v-model="prop.visibility">
-                      <option v-for="(v, i) in visible" :key="'C'+i" :value="v">{{ v }}</option>
+                      <option v-for="(v, i) in visible" :key="'C' + i" :value="v">{{ v }}</option>
                     </select>
                   </div>
                 </div>
               </div>
 
-              <h6 :key="'D'+key">Параметры</h6>
-              <div :key="'F'+key" class="row">
+              <h6 :key="'D' + key">Параметры</h6>
+              <div :key="'F' + key" class="row">
                 <div class="col-1">
-                  <button @click.prevent="deleteProp('param', key)" class="btn btn-custom btn-primary">-</button>
+                  <button @click.prevent="deleteProp('param', key)" class="btn btn-custom-one btn-primary">-</button>
                 </div>
                 <div class="col">
                   <template v-for="(param, index) in prop.parameters">
-                    <div class="form-group" :key="'G'+index">
+                    <div class="form-group" :key="'G' + index">
                       <div class="row">
                         <div class="col">
                           <label>Имя</label>
@@ -88,7 +90,7 @@
                   </template>
                 </div>
                 <div class="col-1">
-                  <button @click.prevent="addElement('param', key)" class="btn btn-custom btn-primary">+</button>
+                  <button @click.prevent="addElement('param', key)" class="btn btn-custom-one btn-primary">+</button>
                 </div>
 
               </div>
@@ -97,7 +99,7 @@
             </template>
           </div>
           <div class="col-1">
-            <button @click.prevent="addElement('method')" class="btn btn-custom btn-primary">+</button>
+            <button @click.prevent="addElement('method')" class="btn btn-custom-one btn-primary">+</button>
           </div>
         </div>
         <div class="row py-2 ">
@@ -113,7 +115,7 @@
 </template>
 
 <script>
-import {eventBus} from "@/eventBus";
+import { eventBus } from "@/eventBus";
 
 export default {
   name: "AddForm",
@@ -122,33 +124,33 @@ export default {
       createNode: {
         name: "Имя класса",
         properties: [
-          {name: "Имя св-ва", type: "Тип", visibility: "public"},
+          { name: "Имя св-ва", type: "Тип", visibility: "public" },
         ],
         methods: [
-          {name: "Имя метода", parameters: [{name: "Параметр", type: "Тип"}], visibility: "public"},
+          { name: "Имя метода", parameters: [{ name: "Параметр", type: "Тип" }], visibility: "public" },
         ]
       },
       visible: ['public', 'private', 'protected']
     }
   },
   methods: {
-    addNode(){
+    addNode() {
       eventBus.$emit('addedNode', this.createNode)
     },
     addElement(element, key) {
       switch (element) {
         case "prop":
-          this.createNode.properties.push({name: "Имя св-ва", type: "Тип", visibility: "public"})
+          this.createNode.properties.push({ name: "Имя св-ва", type: "Тип", visibility: "public" })
           break
         case "method":
           this.createNode.methods.push({
             name: "Имя метода",
-            parameters: [{name: "Параметр", type: "Тип"}],
+            parameters: [{ name: "Параметр", type: "Тип" }],
             visibility: "public"
           })
           break
         case "param":
-          this.createNode.methods[key].parameters.push({name: "Параметр", type: "Тип"})
+          this.createNode.methods[key].parameters.push({ name: "Параметр", type: "Тип" })
           break
       }
     },
@@ -170,7 +172,7 @@ export default {
 </script>
 
 <style scoped>
-.btn-custom {
+.btn-custom-one {
   margin-top: 90%;
 }
 </style>
