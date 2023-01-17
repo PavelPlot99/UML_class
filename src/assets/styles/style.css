@@ -1,4 +1,5 @@
-body, html{
+body,
+html {
     margin: 0;
     height: 100%;
 }
@@ -17,6 +18,7 @@ body, html{
     background: transparent;
     z-index: 9999999;
 }
+
 .vue-modal-topRight,
 .vue-modal-topLeft,
 .vue-modal-bottomLeft,
@@ -24,6 +26,7 @@ body, html{
     width: 12px;
     height: 12px;
 }
+
 .vue-modal-top {
     right: 12;
     top: 0;
@@ -31,6 +34,7 @@ body, html{
     height: 12px;
     cursor: n-resize;
 }
+
 .vue-modal-bottom {
     left: 0;
     bottom: 0;
@@ -38,6 +42,7 @@ body, html{
     height: 12px;
     cursor: s-resize;
 }
+
 .vue-modal-left {
     left: 0;
     top: 0;
@@ -45,6 +50,7 @@ body, html{
     height: 100%;
     cursor: w-resize;
 }
+
 .vue-modal-right {
     right: 0;
     top: 0;
@@ -52,27 +58,32 @@ body, html{
     height: 100%;
     cursor: e-resize;
 }
+
 .vue-modal-topRight {
     right: 0;
     top: 0;
     background: transparent;
     cursor: ne-resize;
 }
+
 .vue-modal-topLeft {
     left: 0;
     top: 0;
     cursor: nw-resize;
 }
+
 .vue-modal-bottomLeft {
     left: 0;
     bottom: 0;
     cursor: sw-resize;
 }
+
 .vue-modal-bottomRight {
     right: 0;
     bottom: 0;
     cursor: se-resize;
 }
+
 #vue-modal-triangle::after {
     display: block;
     position: absolute;
@@ -85,6 +96,7 @@ body, html{
     border-bottom: 10px solid #ddd;
     border-left: 10px solid transparent;
 }
+
 #vue-modal-triangle.clicked::after {
     border-bottom: 10px solid #369be9;
 }
@@ -94,6 +106,7 @@ body, html{
     overflow: hidden;
     width: 100vw;
 }
+
 .vm--container {
     position: fixed;
     box-sizing: border-box;
@@ -103,6 +116,7 @@ body, html{
     height: 100vh;
     z-index: 999;
 }
+
 .vm--overlay {
     position: fixed;
     box-sizing: border-box;
@@ -114,12 +128,14 @@ body, html{
     /* z-index: 999; */
     opacity: 1;
 }
+
 .vm--container.scrollable {
     height: 100%;
     min-height: 100vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
+
 .vm--modal {
     position: relative;
     overflow-y: scroll;
@@ -129,36 +145,44 @@ body, html{
     border-radius: 3px;
     box-shadow: 0 20px 60px -2px rgba(27, 33, 58, 0.4);
 }
+
 .vm--container.scrollable .vm--modal {
     margin-bottom: 2px;
 }
+
 .vm--top-right-slot {
     display: block;
     position: absolute;
     right: 0;
     top: 0;
 }
+
 .vm-transition--overlay-enter-active,
 .vm-transition--overlay-leave-active {
     transition: all 50ms;
 }
+
 .vm-transition--overlay-enter,
 .vm-transition--overlay-leave-active {
     opacity: 0;
 }
+
 .vm-transition--modal-enter-active,
 .vm-transition--modal-leave-active {
     transition: all 400ms;
 }
+
 .vm-transition--modal-enter,
 .vm-transition--modal-leave-active {
     opacity: 0;
     transform: translateY(-20px);
 }
+
 .vm-transition--default-enter-active,
 .vm-transition--default-leave-active {
     transition: all 2ms;
 }
+
 .vm-transition--default-enter,
 .vm-transition--default-leave-active {
     opacity: 0;
@@ -168,28 +192,34 @@ body, html{
 .vue-dialog {
     font-size: 14px;
 }
+
 .vue-dialog div {
     box-sizing: border-box;
 }
+
 .vue-dialog-content {
     flex: 1 0 auto;
     width: 100%;
     padding: 14px;
 }
+
 .vue-dialog-content-title {
     font-weight: 600;
     padding-bottom: 14px;
 }
+
 .vue-dialog-buttons {
     display: flex;
     flex: 0 1 auto;
     width: 100%;
     border-top: 1px solid #eee;
 }
+
 .vue-dialog-buttons-none {
     width: 100%;
     padding-bottom: 14px;
 }
+
 .vue-dialog-button {
     font-size: inherit;
     background: transparent;
@@ -204,13 +234,50 @@ body, html{
     font: inherit;
     outline: none;
 }
+
 .vue-dialog-button:hover {
     background: #f9f9f9;
 }
+
 .vue-dialog-button:active {
     background: #f3f3f3;
 }
+
 .vue-dialog-button:not(:first-of-type) {
     border-left: 1px solid #eee;
 }
 
+.btn-custom {
+    position: relative;
+    display: block;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    font-size: 14px;
+    text-decoration: none;
+    border: 2px solid #ff7675;
+    padding: 14px 60px;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: 1s all ease;
+}
+
+.btn-custom::before {
+    background: #ff7675;
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    transition: all 0.6s ease;
+}
+
+.btn-custom-animation::before {
+    width: 300px;
+    height: 0%;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.btn-custom-animation:hover::before {
+    height: 380%;
+}
