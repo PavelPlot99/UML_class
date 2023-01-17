@@ -10,7 +10,7 @@
         <form>
           <div class="mb-3">
             <label for="login" class="form-label">Логин</label>
-            <input type="password" class="form-control" v-model="data.login" id="login" aria-describedby="emailHelp">
+            <input type="text" class="form-control" v-model="data.login" id="login" aria-describedby="emailHelp">
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Пароль</label>
