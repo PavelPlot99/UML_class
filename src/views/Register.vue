@@ -49,7 +49,7 @@ export default {
         text: data.message,
       })
       if (data.type == 'success') {
-        this.$router.push('/login')
+        this.$router.push('/')
       }
     }
   }

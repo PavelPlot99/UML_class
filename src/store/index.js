@@ -25,66 +25,66 @@ export default new Vuex.Store({
                 key: 1,
                 name: "BankAccount",
                 properties: [
-                    {name: "owner", type: "String", visibility: "public"},
-                    {name: "balance", type: "Currency", visibility: "public", default: "0"}
+                    { name: "owner", type: "String", visibility: "public" },
+                    { name: "balance", type: "Currency", visibility: "public", default: "0" }
                 ],
                 methods: [
-                    {name: "deposit", parameters: [{name: "Тест", type: "Тестовый"}], visibility: "public"},
-                    {name: "withdraw", parameters: [{name: "amount", type: "Currency"}], visibility: "public"}
+                    { name: "deposit", parameters: [{ name: "Тест", type: "Тестовый" }], visibility: "public" },
+                    { name: "withdraw", parameters: [{ name: "amount", type: "Currency" }], visibility: "public" }
                 ]
             },
             {
                 key: 11,
                 name: "Person",
                 properties: [
-                    {name: "name", type: "String", visibility: "public"},
-                    {name: "birth", type: "Date", visibility: "protected"}
+                    { name: "name", type: "String", visibility: "public" },
+                    { name: "birth", type: "Date", visibility: "protected" }
                 ],
                 methods: [
-                    {name: "getCurrentAge", type: "int", visibility: "public"}
+                    { name: "getCurrentAge", type: "int", visibility: "public" }
                 ]
             },
             {
                 key: 12,
                 name: "Student",
                 properties: [
-                    {name: "classes", type: "List", visibility: "public"}
+                    { name: "classes", type: "List", visibility: "public" }
                 ],
                 methods: [
-                    {name: "attend", parameters: [{name: "class", type: "Course"}], visibility: "private"},
-                    {name: "sleep", visibility: "private"}
+                    { name: "attend", parameters: [{ name: "class", type: "Course" }], visibility: "private" },
+                    { name: "sleep", visibility: "private" }
                 ]
             },
             {
                 key: 13,
                 name: "Professor",
                 properties: [
-                    {name: "classes", type: "List", visibility: "public"}
+                    { name: "classes", type: "List", visibility: "public" }
                 ],
                 methods: [
-                    {name: "teach", parameters: [{name: "class", type: "Course"}], visibility: "private"}
+                    { name: "teach", parameters: [{ name: "class", type: "Course" }], visibility: "private" }
                 ]
             },
             {
                 key: 14,
                 name: "Course",
                 properties: [
-                    {name: "name", type: "String", visibility: "public"},
-                    {name: "description", type: "String", visibility: "public"},
-                    {name: "professor", type: "Professor", visibility: "public"},
-                    {name: "location", type: "String", visibility: "public"},
-                    {name: "times", type: "List", visibility: "public"},
-                    {name: "prerequisites", type: "List", visibility: "public"},
-                    {name: "students", type: "List", visibility: "public"}
+                    { name: "name", type: "String", visibility: "public" },
+                    { name: "description", type: "String", visibility: "public" },
+                    { name: "professor", type: "Professor", visibility: "public" },
+                    { name: "location", type: "String", visibility: "public" },
+                    { name: "times", type: "List", visibility: "public" },
+                    { name: "prerequisites", type: "List", visibility: "public" },
+                    { name: "students", type: "List", visibility: "public" }
                 ]
             }
         ],
         linkdata: [
-            {from: 12, to: 11, relationship: "generalization",},
-            {from: 13, to: 11, relationship: "generalization",},
-            {from: 14, to: 13, relationship: "dependence",},
-            {from: 12, to: 14, relationship: "composition",},
-            {from: 11, to: 14, relationship: "association",}
+            { from: 12, to: 11, relationship: "generalization", },
+            { from: 13, to: 11, relationship: "generalization", },
+            { from: 14, to: 13, relationship: "dependence", },
+            { from: 12, to: 14, relationship: "composition", },
+            { from: 11, to: 14, relationship: "association", }
         ],
         isAdding: false,
     },
@@ -121,19 +121,23 @@ export default new Vuex.Store({
             }
             await axios
                 .post('/register', {
-                        login: userData.login,
-                        password: userData.password,
-                    },
+                    login: userData.login,
+                    password: userData.password,
+                },
                     {
                         headers: {
                             Accept: `Application/json`,
                         },
                     }
                 )
-                .then(() => {
+                .then((result) => {
                     data.type = 'success'
                     data.message = 'Вы успешно зарегистрировались'
                     data.title = TITLE_ON_SUCCESS
+                    context.commit('setToken', result.data.data.token)
+                    context.commit('setUserLogin', result.data.data.user.login)
+                    localStorage.setItem('JWT', result.data.data.token)
+                    localStorage.setItem('login', result.data.data.user.login)
                 })
                 .catch(() => {
                     data.type = TYPE_ON_ERROR
@@ -151,9 +155,9 @@ export default new Vuex.Store({
             }
             await axios
                 .post('/login', {
-                        login: userData.login,
-                        password: userData.password,
-                    },
+                    login: userData.login,
+                    password: userData.password,
+                },
                     {
                         headers: {
                             Accept: `Application/json`,
