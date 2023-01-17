@@ -4,7 +4,7 @@
 
 <script>
 import * as go from 'gojs/release/go-module'
-import {eventBus} from "@/eventBus";
+import { eventBus } from "@/eventBus";
 import AddLinkForm from "@/components/AddLinkForm";
 import AddForm from "@/components/AddForm";
 
@@ -26,6 +26,7 @@ export default {
   methods: {
     addNode(node) {
       this.myDiagram.model.addNodeData(node)
+      this.$modal.hideAll();
     },
     convertVisibility(v) {
       switch (v) {
@@ -140,156 +141,156 @@ export default {
       }
     },
     // eslint-disable-next-line no-unused-vars
-    onDoubleClick(e, node){
+    onDoubleClick(e, node) {
       // eslint-disable-next-line no-unused-vars
-     this.myDiagram.commit(d => console.log(d))
+      this.myDiagram.commit(d => console.log(d))
     },
     showAddLinkForm() {
-      this.$modal.show(AddLinkForm, {first: this.firstNodeRelation, second: this.secondNodeRelation})
+      this.$modal.show(AddLinkForm, { first: this.firstNodeRelation, second: this.secondNodeRelation })
     },
 
     drawDiagramm() {
       this.$ = go.GraphObject.make;
       this.myDiagram =
-          this.$(go.Diagram, "myDiagramDiv",
+        this.$(go.Diagram, "myDiagramDiv",
+          {
+            "undoManager.isEnabled": true,
+            layout: this.$(go.TreeLayout,
               {
-                "undoManager.isEnabled": true,
-                layout: this.$(go.TreeLayout,
-                    {
-                      angle: 90,
-                      path: go.TreeLayout.PathSource,
-                      setsPortSpot: false,
-                      setsChildPortSpot: false,
-                      arrangement: go.TreeLayout.ArrangementHorizontal
-                    })
-              });
+                angle: 90,
+                path: go.TreeLayout.PathSource,
+                setsPortSpot: false,
+                setsChildPortSpot: false,
+                arrangement: go.TreeLayout.ArrangementHorizontal
+              })
+          });
 
       var propertyTemplate =
-          this.$(go.Panel, "Horizontal",
-              // property visibility/access
-              this.$(go.TextBlock,
-                  {isMultiline: false, editable: true, width: 12},
-                  new go.Binding("text", "visibility", this.convertVisibility)),
-              this.$(go.TextBlock,
-                  {isMultiline: false, editable: true},
-                  new go.Binding("text", "name").makeTwoWay(),
-                  new go.Binding("isUnderline", "scope", s => s[0] === 'c')),
-              this.$(go.TextBlock, "",
-                  new go.Binding("text", "type", t => t ? ": " : "")),
-              this.$(go.TextBlock,
-                  {isMultiline: false, editable: true},
-                  new go.Binding("text", "type").makeTwoWay()),
-              this.$(go.TextBlock,
-                  {isMultiline: false, editable: true},
-                  new go.Binding("text", "default", s => s ? " = " + s : ""))
-          );
+        this.$(go.Panel, "Horizontal",
+          // property visibility/access
+          this.$(go.TextBlock,
+            { isMultiline: false, editable: true, width: 12 },
+            new go.Binding("text", "visibility", this.convertVisibility)),
+          this.$(go.TextBlock,
+            { isMultiline: false, editable: true },
+            new go.Binding("text", "name").makeTwoWay(),
+            new go.Binding("isUnderline", "scope", s => s[0] === 'c')),
+          this.$(go.TextBlock, "",
+            new go.Binding("text", "type", t => t ? ": " : "")),
+          this.$(go.TextBlock,
+            { isMultiline: false, editable: true },
+            new go.Binding("text", "type").makeTwoWay()),
+          this.$(go.TextBlock,
+            { isMultiline: false, editable: true },
+            new go.Binding("text", "default", s => s ? " = " + s : ""))
+        );
 
       var methodTemplate =
-          this.$(go.Panel, "Horizontal",
-              this.$(go.TextBlock,
-                  {isMultiline: true, editable: true, width: 12},
-                  new go.Binding("text", "visibility", this.convertVisibility)),
-              this.$(go.TextBlock,
-                  {isMultiline: false, editable: true},
-                  new go.Binding("text", "name").makeTwoWay(),
-                  new go.Binding("isUnderline", "scope", s => s[0] === 'c')),
-              this.$(go.TextBlock, {isMultiline:false, editable: true}, "()",
-                  new go.Binding("text", "parameters", function (parr) {
-                    var s = "(";
-                    for (var i = 0; i < parr.length; i++) {
-                      var param = parr[i];
-                      if (i > 0) s += ", ";
-                      s += param.name + ": " + param.type;
-                    }
-                    return s + ")";
-                  })),
-              this.$(go.TextBlock, "",
-                  new go.Binding("text", "type", t => t ? ": " : "")),
-              this.$(go.TextBlock,
-                  {isMultiline: false, editable: true},
-                  new go.Binding("text", "type").makeTwoWay())
-          );
+        this.$(go.Panel, "Horizontal",
+          this.$(go.TextBlock,
+            { isMultiline: true, editable: true, width: 12 },
+            new go.Binding("text", "visibility", this.convertVisibility)),
+          this.$(go.TextBlock,
+            { isMultiline: false, editable: true },
+            new go.Binding("text", "name").makeTwoWay(),
+            new go.Binding("isUnderline", "scope", s => s[0] === 'c')),
+          this.$(go.TextBlock, { isMultiline: false, editable: true }, "()",
+            new go.Binding("text", "parameters", function (parr) {
+              var s = "(";
+              for (var i = 0; i < parr.length; i++) {
+                var param = parr[i];
+                if (i > 0) s += ", ";
+                s += param.name + ": " + param.type;
+              }
+              return s + ")";
+            })),
+          this.$(go.TextBlock, "",
+            new go.Binding("text", "type", t => t ? ": " : "")),
+          this.$(go.TextBlock,
+            { isMultiline: false, editable: true },
+            new go.Binding("text", "type").makeTwoWay())
+        );
 
       this.myDiagram.nodeTemplate =
-          this.$(go.Node, "Auto",
+        this.$(go.Node, "Auto",
+          {
+            locationSpot: go.Spot.Center,
+            fromSpot: go.Spot.AllSides,
+            toSpot: go.Spot.AllSides,
+            click: this.onClickNode,
+            doubleClick: this.onDoubleClick,
+          },
+          this.$(go.Shape, { fill: "lightyellow" }),
+          this.$(go.Panel, "Table",
+            { defaultRowSeparatorStroke: "black" },
+            // header
+            this.$(go.TextBlock,
               {
-                locationSpot: go.Spot.Center,
-                fromSpot: go.Spot.AllSides,
-                toSpot: go.Spot.AllSides,
-                click: this.onClickNode,
-                doubleClick: this.onDoubleClick,
+                row: 0, columnSpan: 2, margin: 3, alignment: go.Spot.Center,
+                font: "bold 12pt sans-serif",
+                isMultiline: false, editable: true
               },
-              this.$(go.Shape, {fill: "lightyellow"}),
-              this.$(go.Panel, "Table",
-                  {defaultRowSeparatorStroke: "black"},
-                  // header
-                  this.$(go.TextBlock,
-                      {
-                        row: 0, columnSpan: 2, margin: 3, alignment: go.Spot.Center,
-                        font: "bold 12pt sans-serif",
-                        isMultiline: false, editable: true
-                      },
-                      new go.Binding("text", "name").makeTwoWay()),
-                  // properties
-                  this.$(go.TextBlock, "Свойства класса",
-                      {row: 1, font: "italic 10pt sans-serif"},
-                      new go.Binding("visible", "visible", v => !v).ofObject("PROPERTIES")),
-                  this.$(go.Panel, "Vertical", {name: "PROPERTIES"},
-                      new go.Binding("itemArray", "properties"),
-                      {
-                        row: 1, margin: 3, stretch: go.GraphObject.Fill,
-                        defaultAlignment: go.Spot.Left, background: "lightyellow",
-                        itemTemplate: propertyTemplate
-                      }
-                  ),
-                  this.$("PanelExpanderButton", "PROPERTIES",
-                      {row: 1, column: 1, alignment: go.Spot.TopRight, visible: false},
-                      new go.Binding("visible", "properties", arr => arr.length > 0)),
-                  // methods
-                  this.$(go.TextBlock, "Методы класса",
-                      {row: 2, font: "italic 10pt sans-serif"},
-                      new go.Binding("visible", "visible", v => !v).ofObject("METHODS")),
-                  this.$(go.Panel, "Vertical", {name: "METHODS"},
-                      new go.Binding("itemArray", "methods"),
-                      {
-                        row: 2, margin: 3, stretch: go.GraphObject.Fill,
-                        defaultAlignment: go.Spot.Left, background: "lightyellow",
-                        itemTemplate: methodTemplate
-                      }
-                  ),
-                  this.$("PanelExpanderButton", "METHODS",
-                      {row: 2, column: 1, alignment: go.Spot.TopRight, visible: false},
-                      new go.Binding("visible", "methods", arr => arr.length > 0))
-              )
-          );
+              new go.Binding("text", "name").makeTwoWay()),
+            // properties
+            this.$(go.TextBlock, "Свойства класса",
+              { row: 1, font: "italic 10pt sans-serif" },
+              new go.Binding("visible", "visible", v => !v).ofObject("PROPERTIES")),
+            this.$(go.Panel, "Vertical", { name: "PROPERTIES" },
+              new go.Binding("itemArray", "properties"),
+              {
+                row: 1, margin: 3, stretch: go.GraphObject.Fill,
+                defaultAlignment: go.Spot.Left, background: "lightyellow",
+                itemTemplate: propertyTemplate
+              }
+            ),
+            this.$("PanelExpanderButton", "PROPERTIES",
+              { row: 1, column: 1, alignment: go.Spot.TopRight, visible: false },
+              new go.Binding("visible", "properties", arr => arr.length > 0)),
+            // methods
+            this.$(go.TextBlock, "Методы класса",
+              { row: 2, font: "italic 10pt sans-serif" },
+              new go.Binding("visible", "visible", v => !v).ofObject("METHODS")),
+            this.$(go.Panel, "Vertical", { name: "METHODS" },
+              new go.Binding("itemArray", "methods"),
+              {
+                row: 2, margin: 3, stretch: go.GraphObject.Fill,
+                defaultAlignment: go.Spot.Left, background: "lightyellow",
+                itemTemplate: methodTemplate
+              }
+            ),
+            this.$("PanelExpanderButton", "METHODS",
+              { row: 2, column: 1, alignment: go.Spot.TopRight, visible: false },
+              new go.Binding("visible", "methods", arr => arr.length > 0))
+          )
+        );
 
 
       this.myDiagram.linkTemplate =
-          this.$(go.Link, {routing: go.Link.Orthogonal},
-              new go.Binding("isLayoutPositioned", "relationship", this.convertIsTreeLink),
-              this.$(go.Shape, new go.Binding('strokeDashArray', 'relationship', this.convertDash)),
-              this.$(go.Shape, {scale: 1.3, fill: "White"},
-                  new go.Binding("fromArrow", "relationship", this.convertFromArrow)),
-              this.$(go.Shape, {scale: 1.3},
-                  new go.Binding('fill', 'relationship', this.colorArrowFrom),
-                  new go.Binding("toArrow", "relationship", this.convertToArrow)),
-          );
+        this.$(go.Link, { routing: go.Link.Orthogonal },
+          new go.Binding("isLayoutPositioned", "relationship", this.convertIsTreeLink),
+          this.$(go.Shape, new go.Binding('strokeDashArray', 'relationship', this.convertDash)),
+          this.$(go.Shape, { scale: 1.3, fill: "White" },
+            new go.Binding("fromArrow", "relationship", this.convertFromArrow)),
+          this.$(go.Shape, { scale: 1.3 },
+            new go.Binding('fill', 'relationship', this.colorArrowFrom),
+            new go.Binding("toArrow", "relationship", this.convertToArrow)),
+        );
       this.myDiagram.model = new go.GraphLinksModel(
-          {
-            copiesArrays: true,
-            copiesArrayObjects: true,
-            nodeDataArray: this.nodedata,
-            linkDataArray: this.linkdata
-          });
+        {
+          copiesArrays: true,
+          copiesArrayObjects: true,
+          nodeDataArray: this.nodedata,
+          linkDataArray: this.linkdata
+        });
     },
-    async getSavedDiagramm(){
+    async getSavedDiagramm() {
       // eslint-disable-next-line no-unused-vars
       let data = await this.$store.dispatch('SHOW_PROJECT', this.$route.query.id)
       console.log(data.data.schema)
-      if(data.data.schema === null){
+      if (data.data.schema === null) {
         this.$store.commit('setNode', [])
         this.$store.commit('setLink', [])
-      }else {
+      } else {
         data.data = JSON.parse(data.data.schema)
         this.$store.commit('setNode', data.data.nodedata)
         this.$store.commit('setLink', data.data.linkdata)
@@ -300,15 +301,15 @@ export default {
         text: data.message,
       })
     },
-    async save(){
+    async save() {
       let nodedata = JSON.parse(JSON.stringify(this.myDiagram.model.nodeDataArray))
       let linkdata = JSON.parse(JSON.stringify(this.myDiagram.model.linkDataArray))
-      let savedata = {nodedata: nodedata, linkdata: linkdata}
+      let savedata = { nodedata: nodedata, linkdata: linkdata }
       let updateSchema = {
         data: savedata,
         id: this.$route.query.id
       }
-      let data = await this.$store.dispatch('SAVE_SCHEMA',updateSchema)
+      let data = await this.$store.dispatch('SAVE_SCHEMA', updateSchema)
       this.$notify({
         type: data.type,
         title: data.title,
@@ -341,11 +342,11 @@ export default {
     linkdata() {
       return this.$store.state.linkdata
     },
-    isAdding:{
-      get(){
+    isAdding: {
+      get() {
         return this.$store.state.isAdding
       },
-      set(value){
+      set(value) {
         this.$store.commit('changeIsAdding', value)
       }
     }
