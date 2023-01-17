@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-top: 15%;">
     <div class="row justify-content-center">
       <div class="col text-center">
         <h1>Вход</h1>
