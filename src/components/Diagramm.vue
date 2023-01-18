@@ -155,7 +155,7 @@ export default {
         this.$(go.Diagram, "myDiagramDiv",
           {
             "undoManager.isEnabled": true,
-            layout: this.$(go.TreeLayout,
+            layout: this.$(go.TreeLayout,//Порыть в эту сторону
               {
                 angle: 90,
                 path: go.TreeLayout.PathSource,
@@ -214,12 +214,13 @@ export default {
       this.myDiagram.nodeTemplate =
         this.$(go.Node, "Auto",
           {
-            locationSpot: go.Spot.Center,
+            //locationSpot: go.Spot.Center,
             fromSpot: go.Spot.AllSides,
             toSpot: go.Spot.AllSides,
             click: this.onClickNode,
             doubleClick: this.onDoubleClick,
           },
+          new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
           this.$(go.Shape, { fill: "lightyellow" }),
           this.$(go.Panel, "Table",
             { defaultRowSeparatorStroke: "black" },
@@ -275,25 +276,31 @@ export default {
             new go.Binding('fill', 'relationship', this.colorArrowFrom),
             new go.Binding("toArrow", "relationship", this.convertToArrow)),
         );
-      this.myDiagram.model = new go.GraphLinksModel(
-        {
-          copiesArrays: true,
-          copiesArrayObjects: true,
-          nodeDataArray: this.nodedata,
-          linkDataArray: this.linkdata
-        });
+      if (this.nodedata == []) {
+        this.myDiagram.model = new go.GraphLinksModel(
+          {
+            copiesArrays: true,
+            copiesArrayObjects: true,
+            nodeDataArray: this.nodedata,
+            linkDataArray: this.linkdata
+          });
+      } else {
+        this.myDiagram.model = go.Model.fromJson(this.nodedata);
+      }
+      console.log(this.myDiagram)
+
     },
     async getSavedDiagramm() {
       // eslint-disable-next-line no-unused-vars
       let data = await this.$store.dispatch('SHOW_PROJECT', this.$route.query.id)
-      console.log(data.data.schema)
       if (data.data.schema === null) {
         this.$store.commit('setNode', [])
         this.$store.commit('setLink', [])
       } else {
-        data.data = JSON.parse(data.data.schema)
-        this.$store.commit('setNode', data.data.nodedata)
-        this.$store.commit('setLink', data.data.linkdata)
+        this.$store.commit('setNode', data.data.schema)
+
+        //this.$store.commit('setLink', data.data.linkdata)
+
       }
       this.$notify({
         type: data.type,
@@ -302,11 +309,17 @@ export default {
       })
     },
     async save() {
-      let nodedata = JSON.parse(JSON.stringify(this.myDiagram.model.nodeDataArray))
-      let linkdata = JSON.parse(JSON.stringify(this.myDiagram.model.linkDataArray))
-      let savedata = { nodedata: nodedata, linkdata: linkdata }
+      let savedModel = this.myDiagram.model.toJson()
+
+      console.log(savedModel)
+      this.myDiagram.isModified = false
+      // let nodedata = JSON.parse(JSON.stringify(this.myDiagram.model.nodeDataArray))
+      // let linkdata = JSON.parse(JSON.stringify(this.myDiagram.model.linkDataArray))
+      // let savedata = { nodedata: nodedata, linkdata: linkdata }
+      // console.log(nodedata);
+      // console.log(this.myDiagram.model)
       let updateSchema = {
-        data: savedata,
+        data: savedModel,
         id: this.$route.query.id
       }
       let data = await this.$store.dispatch('SAVE_SCHEMA', updateSchema)
