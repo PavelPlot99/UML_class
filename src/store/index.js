@@ -245,6 +245,33 @@ export default new Vuex.Store({
                 })
             return data
         },
+        CREATE_PROJECT_WITH_IMPORT: async (context, project) => {
+            let data = {}
+            await axios
+                .post(
+                    '/project/import',
+                    project,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${context.state.userToken}`,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+
+                )
+                .then((result) => {
+                    data.data = result.data.data
+                    data.type = TYPE_ON_SUCCESS
+                    data.title = TITLE_ON_SUCCESS
+                    data.message = "Проект успешно создан"
+                })
+                .catch(() => {
+                    data.type = TYPE_ON_ERROR
+                    data.title = TITLE_ON_ERROR
+                    data.message = MESSAGE_ON_ERROR
+                })
+            return data
+        },
         SHOW_PROJECT: async (context, id) => {
             let data = {}
             await axios

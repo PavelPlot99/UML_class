@@ -11,7 +11,7 @@
     </div>
     <div class="row row-bg">
       <div class="col-3 card-project  border text-center align-content-center" v-for="project in projects"
-        :key="project.id" @dblclick="deleteProject(project.id)" @click="showDiagramm(project.id)">
+        :key="project.id" @dblclick.right="deleteProject(project.id)" @click="showDiagramm(project)">
         <h4 class="text-card">{{ project.name }}</h4>
       </div>
       <div class="col-3 card-project  border text-center align-content-center" @click="showForm">
@@ -68,8 +68,17 @@ export default {
         this.$router.push({ name: 'Login' })
       }, 1000)
     },
-    async showDiagramm(id) {
-      this.$router.push({ path: '/diagramm', query: { id } })
+    async showDiagramm(project) {
+      if (project.import_status === "in_progress") {
+        this.$notify({
+          type: 'error',
+          title: 'Данные еще не импортировались',
+          text: 'Попробуйте позже',
+        });
+        await this.getProjects();
+        return false;
+      }
+      this.$router.push({ path: '/diagramm', query: { id: project.id } })
     },
     async deleteProject(id) {
       if (confirm("Вы действительно хотите удалить проект?")) {
